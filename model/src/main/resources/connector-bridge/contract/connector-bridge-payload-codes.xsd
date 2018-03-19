@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Bridge Connector Payload 20130615 -->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:xeu:connector-bridge:v1"
+            elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:simpleType name="AddressType">
+		<xsd:annotation>
+ 			<xsd:documentation>Endpoint Address, either a Hierarchical Fully Qualified FLUX Address or a simple 3-letter ISO alpha-3 Country or International Organisation code from ISO 3166-1.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:token">
+			<xsd:minLength value="3"/>
+			<xsd:maxLength value="64"/>
+			<!--xs:pattern value="[A-Z]{3}(:[^:]+)*" /-->
+			<!-- First 3 letters are listed in MDR: FLUX Address -->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="EmailListType">
+		<xsd:annotation>
+			<xsd:documentation>List of Email addresses.</xsd:documentation>
+		</xsd:annotation>
+		 <xsd:list itemType="xsd:token"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DataflowType">
+		<xsd:annotation>
+			<xsd:documentation>FLUX Dataflow name, usually the XML Namespace of the business payload. Possible values are agreed between Endpoints.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:token">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="255"/>
+			<!-- Possible values are agreed between Endpoints -->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="OperationNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Serial number of the message on the Originator Endpoint. Together with MSG@FR it uniquely identifies an Envelope in the whole network. Format is XXXXXXYYYYMMDD999999 where XXXXXX is the originator Endpoint-wide unique seqence counter identifier, followed by numbers that uniquely identify the business message tagged by this sequence counter on that Endpoint. These numbers may correspond to either the current year followed by a sequence reset every year, or the year then the month and then a sequence number reset every month, or the full date followed by a counter reset everyday.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:token">
+			<xsd:length value="20"/>
+			<!--Uncomment this pattern if you can afford checking it in the synchronous loop: xsd:pattern value="[A-Z0-9]{6}[0-9]{14}"/-->
+			<!--Too restrictive alternative pattern enforcing a daily message counter: value="[A-Z]{3}[A-Z0-9]{3}(\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))[0-9]{6}"/-->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="VerbosityType">
+		<xsd:restriction base="xsd:token">
+			<xsd:enumeration value="error"/>
+			<xsd:enumeration value="warn"/>
+			<xsd:enumeration value="info"/>
+			<xsd:enumeration value="debug"/>
+			<xsd:enumeration value="none"/>
+			<!--xs:length value="6" /-->
+			<!-- Code values are listed in MDR: FLUX Verbosity -->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SyncTimeoutType">
+		<xsd:annotation>
+			<xsd:documentation>Synchronous timeout value in seconds, how long a Node can wait for a synchronous response while trying to forward an Envelope.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:int">
+			<xsd:minInclusive value="10"/>
+			<xsd:maxInclusive value="300"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

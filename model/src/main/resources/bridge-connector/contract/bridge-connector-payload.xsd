@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Connector Bridge Payload 20130606 -->
+<xsd:schema 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:xeu:bridge-connector:v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0"
+	xmlns:connector="urn:xeu:bridge-connector:v1" >
+	<xsd:include schemaLocation="bridge-transmission-codes.xsd"/>
+	
+	 <xsd:element name="Connector2BridgeRequest" type="connector:RequestType" />
+      <xsd:element name="Connector2BridgeResponse" type="connector:ResponseType" />  
+    
+	
+	<xsd:complexType name="RequestType">
+		<xsd:annotation>
+			<xsd:documentation>The top level Connector Bridge Envelope.</xsd:documentation>
+		</xsd:annotation>
+		
+		<xsd:sequence>
+			<xsd:any namespace="##other" processContents="skip">
+				<xsd:annotation>
+					<xsd:documentation>Any Business Message. Nodes never validate this. Endpoint can only validate it asynchronously. Must specify its own XML Namespace using an xmlns attribute. those businesses using a Request-Response Messaging Pattern must have provisions for correlating their Business Responses and Business Requests, e.g. by embedding a GUID somewhere inside the business payload.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:any>
+			
+		</xsd:sequence>
+	    <xsd:attribute name="ON" type="connector:OperationNumberType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>FLUX Transport Return Status code, a 3-digit integer value in ranges 1xx (Ongoing), 201-299 (OK), 400-499 (Client Error) or 500-599 (Server Error). Nodes relay back only ACK synchronous responses where RS value is in range 400-499, 201 (only when MSG@AOR="true") or when giving up transmission. All asynchronous Status (STAT) Envelopes are relayed irrespective of the ACK@RS value inside.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>				
+		<xsd:attribute name="AD" type="connector:AddressType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Envelope Destination. In a Message (POSTMSG) Envelope it holds the destination Endpoint (the ISO Alpha-3 top-level domain Country or International Organization code). Together with the DF value, it specifies the precise destination Endpoint for the Envelope.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="TODT" type="xsd:dateTime">
+			<xsd:annotation>
+				<xsd:documentation>UTC Business Time Out Date and Time of the Message (MSG) Envelope. Set by the Business Message  Envelope originator Endpoint. FLUX will abort transmission and inform Business Contacts if the Envelope cannot be delivered before this date/time.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>		
+		<xsd:attribute name="DF" type="connector:DataflowType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Dataflow name of the Business Payload in the Envelope. Destination Endpoint can use this value to dispatch the Business Message among several Busines Processes</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="AR" type="xsd:boolean">
+			<xsd:annotation>
+				<xsd:documentation>Acknowledge Of Receipt flag: specifies whether a synchronous response with ACK@201 must be relayed back to the Message (MSG) Envelope originator Endpoint or not in case of a successful delivery. Note that FLUX errors are always notified to the Message Envelope originator irrespective of this flag.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+
+		<xsd:attribute name="TO" type="connector:SyncTimeoutType">
+			<xsd:annotation>
+				<xsd:documentation>Optional synchronous timeout value in seconds, how long a Node or Endpoint must wait for a synchronous response while transmitting this Envelope. Can be set by the Message (MSG) Envelope originator Endpoint to any positive integer value number in the range 1 to 500, although values below 30 should better be avoided. Copied from the Message Envelope to its Status (STAT) Envelope. A Message Envelope is considered expired at TODT-TO. Defaults to 60. Maximum is 600.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="CT" type="connector:EmailListType">
+			<xsd:annotation>
+				<xsd:documentation>Optional space-delimited list of Business Contacts Email addresses. If supplied, each Email address in the list will be notified if the Envelope cannot be delivered before TODT.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="VB" type="connector:VerbosityType">
+			<xsd:annotation>
+				<xsd:documentation>Optional Verbosity Level of Node operations, either "error" (Nodes only report permanent errors), "warn" (Nodes also send INFO Envelopes on transient errors), "info" (Nodes also send INFO Envelopes when they do anything), "debug" (Nodes send Emails to notify about everything they do) or "none" (Nodes don't send emails). Copied from the Message (MSG) Envelope to its corresponding Status (STAT) Envelope. Defaults to "error".</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:anyAttribute namespace="##any" processContents="lax"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ResponseType">
+		<xsd:annotation>
+			<xsd:documentation>Synchronous response wrapper.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Status" minOccurs="1" type="xsd:string"/>			
+		</xsd:sequence>		
+	</xsd:complexType>
+	
+</xsd:schema>

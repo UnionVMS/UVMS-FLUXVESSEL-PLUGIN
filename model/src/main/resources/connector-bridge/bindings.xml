@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<jaxb:bindings version="1.0"
+               xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               jaxb:extensionBindingPrefixes="xjc">
+
+    <jaxb:bindings schemaLocation="contract/connector-bridge-payload.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.vessel"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+
+    <!--<jaxb:bindings schemaLocation="contract/connector-bridge-payload-codes.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.vessel"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+-->
+    <jaxb:bindings>
+        <jaxb:globalBindings>
+            <xjc:simple/>
+
+            <!-- use JODA-Time DateTime for xs:date -->
+            <jaxb:javaType name="org.joda.time.DateTime"
+                           xmlType="xs:date"
+                           parseMethod="eu.europa.ec.fisheries.uvms.plugins.flux.vessel.model.mapper.XsdDateTimeConverter.unmarshal"
+                           printMethod="eu.europa.ec.fisheries.uvms.plugins.flux.vessel.model.mapper.XsdDateTimeConverter.marshalDateTime"/>
+
+            <!-- use JODA-Time DateTime for xs:dateTime -->
+            <jaxb:javaType name="org.joda.time.DateTime"
+                           xmlType="xs:dateTime"
+                           parseMethod="eu.europa.ec.fisheries.uvms.plugins.flux.vessel.model.mapper.XsdDateTimeConverter.unmarshal"
+                           printMethod="eu.europa.ec.fisheries.uvms.plugins.flux.vessel.model.mapper.XsdDateTimeConverter.marshalDateTime"/>
+        </jaxb:globalBindings>
+    </jaxb:bindings>
+
+</jaxb:bindings>

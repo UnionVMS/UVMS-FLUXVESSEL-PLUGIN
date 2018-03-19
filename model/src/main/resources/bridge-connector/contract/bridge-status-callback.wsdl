@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions 
+	xmlns:tns="urn:xeu:bridge-connector:callback:wsdl:v1" 
+	xmlns:status="urn:xeu:bridge-connector:callback:v1" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	name="statuscallback" 
+	targetNamespace="urn:xeu:bridge-connector:callback:wsdl:v1">
+	
+	<wsdl:documentation>Version: 1.0 RC 20131018</wsdl:documentation>
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import namespace="urn:xeu:bridge-connector:callback:v1"
+			schemaLocation="bridge-status-callback.xsd"/>			
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="statusCallbackRequest">
+		<wsdl:part name="parameter" element="status:StatusCallbackRequest"/>
+	</wsdl:message>
+	<wsdl:message name="statusCallbackResponse">
+		<wsdl:part name="output" element="status:StatusCallbackResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="StatusCallbackPortType">
+		<wsdl:operation name="post">
+			<wsdl:input message="tns:statusCallbackRequest"/>
+			<wsdl:output message="tns:statusCallbackResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="StatusCallbackSOAP11Binding" type="tns:StatusCallbackPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="post">
+			<soap:operation soapAction="urn:xeu:bridge-connector:callback:wsdl:v1:post"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="StatusCallbackService">
+		<wsdl:port name="StatusCallbackSOAP11Port" binding="tns:StatusCallbackSOAP11Binding">
+			<soap:address location="http://localhost/statuscallback"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

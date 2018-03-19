@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  name="bridge"
+                  targetNamespace="urn:un:unece:uncefact:data:standard:FLUXSalesResponseMessage:3">
+    <wsdl:documentation>Version: 1.0</wsdl:documentation>
+    <wsdl:types>
+        <xsd:schema>
+            <xsd:import namespace="urn:un:unece:uncefact:data:standard:FLUXReportVesselInformation:5"
+                        schemaLocation="FLUXReportVesselInformation_5p1.xsd"/>
+            <xsd:import namespace="urn:un:unece:uncefact:data:standard:FLUXVesselQueryMessage:5"
+                        schemaLocation="FLUXVesselQueryMessage_5p1.xsd"/>
+            <xsd:import namespace="urn:un:unece:uncefact:data:standard:FLUXVesselResponseMessage:5"
+                        schemaLocation="FLUXVesselResponseMessage_5p1.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+</wsdl:definitions>

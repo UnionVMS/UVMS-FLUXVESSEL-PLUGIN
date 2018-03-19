@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Connector Bridge Status Callback 20131018 -->
+<xsd:schema 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:xeu:bridge-connector:callback:v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0"
+	xmlns:status="urn:xeu:bridge-connector:callback:v1"
+	xmlns:connector="urn:xeu:bridge-connector:v1" >
+	
+	<xsd:import namespace="urn:xeu:bridge-connector:v1"
+			schemaLocation="bridge-transmission-codes.xsd"/>	
+		
+	<xsd:element name="StatusCallbackRequest" type="status:StatusCallbackType" />
+    <xsd:element name="StatusCallbackResponse" type="status:CallbackResponseType" />  
+    
+	
+	<xsd:complexType name="StatusCallbackType">
+		<xsd:annotation>
+			<xsd:documentation>The top level Status Callback Bridge Envelope.</xsd:documentation>
+		</xsd:annotation>
+		
+		<xsd:sequence>
+			<xsd:any namespace="##other" processContents="skip">
+				<xsd:annotation>
+					<xsd:documentation>ACK content. Bridge never validate this. BP can only validate it asynchronously. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:any>
+			
+		</xsd:sequence>
+	    <xsd:attribute name="BUSINESS_UUID" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Business-generated unique identifier for the payload message</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="ON" type="connector:OperationNumberType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>FLUX Transport Return Status code, a 3-digit integer value in ranges 1xx (Ongoing), 201-299 (OK), 400-499 (Client Error) or 500-599 (Server Error). Nodes relay back only ACK synchronous responses where RS value is in range 400-499, 201 (only when MSG@AOR="true") or when giving up transmission. All asynchronous Status (STAT) Envelopes are relayed irrespective of the ACK@RS value inside.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>				
+		<xsd:attribute name="FR" type="connector:AddressType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>ACK@RF or STATUS Envelope Originator, Fully Qualified FLUX Address of the system which created the ACK element. Helps poeple understand where the problem occurred in the network.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="RS" type="connector:PermanentFinalReturnStatusType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>FLUX Transport Return Status code, a 3-digit integer value in ranges 1xx (Ongoing), 201-299 (OK), 400-499 (Client Error) or 500-599 (Server Error). Nodes relay back only ACK synchronous responses where RS value is in range 400-499, 201 (only when MSG@AOR="true") or when giving up transmission. All asynchronous Status (STAT) Envelopes are relayed irrespective of the ACK@RS value inside.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="RE" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>If rejected, free text field to give details why rejected</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="CT" type="connector:EmailListType">
+			<xsd:annotation>
+				<xsd:documentation>If rejected, space-delimited list of FLUX contact email addresses from whom to get more details why rejected. Whenever a Node gives up transmission, it populates this value with the contact email addresses corresponding to the attempted route as configured in its routing table, if this information is available.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:anyAttribute namespace="##any" processContents="lax"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="CallbackResponseType">
+		<xsd:annotation>
+			<xsd:documentation>Synchronous response wrapper.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ResponseMessage" minOccurs="1" type="xsd:string"/>			
+		</xsd:sequence>		
+	</xsd:complexType>
+	
+</xsd:schema>

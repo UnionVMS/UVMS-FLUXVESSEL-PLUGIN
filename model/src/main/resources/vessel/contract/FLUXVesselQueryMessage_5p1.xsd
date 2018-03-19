@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trimmed schema FLUXVesselQueryMessage_5p1.xsd -->
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+            targetNamespace="urn:un:unece:uncefact:data:standard:FLUXVesselQueryMessage:5" version="5.1"
+            xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20"
+            xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXVesselQueryMessage:5"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" schemaLocation="UnqualifiedDataType_20p0.xsd" />
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" schemaLocation="ReusableAggregateBusinessInformationEntity_20p0.xsd" />
+  <xsd:element name="FLUXVesselQueryMessage" type="rsm:FLUXVesselQueryMessageType" />
+  <xsd:complexType name="FLUXVesselQueryMessageType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" name="VesselQuery" type="ram:VesselQueryType" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

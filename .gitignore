@@ -1,0 +1,7 @@
+target
+.idea
+**/*.iml
+*/target
+model/src/main/java/eu/europa/ec/fisheries/schema/vessel
+xeu
+**/logging.properties

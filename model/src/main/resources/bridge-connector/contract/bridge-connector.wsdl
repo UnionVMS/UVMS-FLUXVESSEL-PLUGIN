@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions 
+	xmlns:tns="urn:xeu:bridge-connector:wsdl:v1" 
+	xmlns:connector="urn:xeu:bridge-connector:v1" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	name="connector" 
+	targetNamespace="urn:xeu:bridge-connector:wsdl:v1">
+	<wsdl:documentation>Version: 1.0 RC 20130606</wsdl:documentation>
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import namespace="urn:xeu:bridge-connector:v1"
+			schemaLocation="bridge-connector-payload.xsd"/>			
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="postRequest">
+		<wsdl:part name="parameter" element="connector:Connector2BridgeRequest"/>
+	</wsdl:message>
+	<wsdl:message name="postResponse">
+		<wsdl:part name="output" element="connector:Connector2BridgeResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="BridgeConnectorPortType">
+		<wsdl:operation name="post">
+			<wsdl:input message="tns:postRequest"/>
+			<wsdl:output message="tns:postResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BridgeConnectorSOAP11Binding" type="tns:BridgeConnectorPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="post">
+			<soap:operation soapAction="urn:xeu:bridge-connector:wsdl:v1:post"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BridgeConnectorService">
+		<wsdl:port name="BridgeConnectorSOAP11Port" binding="tns:BridgeConnectorSOAP11Binding">
+			<soap:address location="http://localhost/connector"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
