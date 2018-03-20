@@ -4,4 +4,5 @@ target
 */target
 model/src/main/java/eu/europa/ec/fisheries/schema/vessel
 xeu
-**/logging.properties
+logging.properties
+plugin.properties
