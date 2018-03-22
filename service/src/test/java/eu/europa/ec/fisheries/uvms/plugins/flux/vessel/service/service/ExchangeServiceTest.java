@@ -22,7 +22,7 @@ public class ExchangeServiceTest {
     @Test
     public void sendVesselInformation() throws Exception {
         //execute
-        exchangeService.sendVesselInformation();
+        exchangeService.sendVesselInformation("<upsert />");
 
         //verify and assert
         verify(producer).sendModuleMessage("TODO", null);

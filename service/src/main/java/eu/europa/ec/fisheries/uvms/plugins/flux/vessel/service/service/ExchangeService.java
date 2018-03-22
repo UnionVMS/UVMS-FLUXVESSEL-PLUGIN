@@ -28,8 +28,9 @@ public class ExchangeService {
     private ExchangeEventMessageProducerBean producer;
 
     //TODO
-    public void sendVesselInformation() throws PluginException {
+    public void sendVesselInformation(String upsertAssetListRequest) {
         try {
+            //TODO: map
             producer.sendModuleMessage("TODO", null);
         } catch (Exception e) {
             throw new PluginException("Unable to send Vessel information to the Exchange queue. Reason: " + e.getMessage(), e);

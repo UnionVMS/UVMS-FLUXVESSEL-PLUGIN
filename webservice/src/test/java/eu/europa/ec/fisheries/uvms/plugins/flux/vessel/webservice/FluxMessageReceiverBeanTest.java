@@ -2,14 +2,22 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.webservice;
 
 import eu.europa.ec.fisheries.schema.vessel.Connector2BridgeRequest;
 import eu.europa.ec.fisheries.schema.vessel.Connector2BridgeResponse;
+import eu.europa.ec.fisheries.schema.vessel.FLUXReportVesselInformation;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.helper.Connector2BridgeRequestHelper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.AssetMapper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.FLUXReportVesselInformationMapper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.UpsertAssetListRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.ExchangeService;
+import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.constants.MessageType.*;
 import static org.junit.Assert.assertEquals;
@@ -31,15 +39,30 @@ public class FluxMessageReceiverBeanTest {
     @Mock
     private Connector2BridgeRequestHelper requestHelper;
 
+    @Mock
+    private FLUXReportVesselInformationMapper fluxReportVesselInformationMapper;
+
+    @Mock
+    private AssetMapper assetMapper;
+
+    @Mock
+    private UpsertAssetListRequestMapper upsertAssetListRequestMapper;
+
 
     @Test
     public void testPostActivityReportWhenSuccessfullyReceivingVesselInformation() throws Exception {
         //data set
         Connector2BridgeRequest request = new Connector2BridgeRequest();
+        FLUXReportVesselInformation vesselInformation = new FLUXReportVesselInformation();
+        List<Asset> assets = new ArrayList<>();
+        String upsertAssetListRequest = "<upsert />";
 
         //mock
         doReturn(true).when(startupBean).isEnabled();
         doReturn(FLUX_REPORT_VESSEL_INFORMATION).when(requestHelper).determineMessageType(request);
+        doReturn(vesselInformation).when(fluxReportVesselInformationMapper).fromConnector2BridgeRequest(request);
+        doReturn(assets).when(assetMapper).fromFLUXReportVesselInformation(vesselInformation);
+        doReturn(upsertAssetListRequest).when(upsertAssetListRequestMapper).mapUpsertAssetList(assets, "FLUX");
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -47,8 +70,11 @@ public class FluxMessageReceiverBeanTest {
         //verify and assert
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
-        verify(exchange).sendVesselInformation();
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper);
+        verify(fluxReportVesselInformationMapper).fromConnector2BridgeRequest(request);
+        verify(assetMapper).fromFLUXReportVesselInformation(vesselInformation);
+        verify(upsertAssetListRequestMapper).mapUpsertAssetList(assets, "FLUX");
+        verify(exchange).sendVesselInformation(upsertAssetListRequest);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
 
         assertNotNull(response);
         assertEquals("OK", response.getStatus());
@@ -69,7 +95,7 @@ public class FluxMessageReceiverBeanTest {
         //verify and assert
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
 
         assertNotNull(response);
         assertEquals("OK", response.getStatus());
@@ -90,7 +116,7 @@ public class FluxMessageReceiverBeanTest {
         //verify and assert
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
 
         assertNotNull(response);
         assertEquals("OK", response.getStatus());
@@ -109,7 +135,7 @@ public class FluxMessageReceiverBeanTest {
 
         //verify
         verify(startupBean).isEnabled();
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
 
         assertNotNull(response);
         assertEquals("NOK", response.getStatus());
