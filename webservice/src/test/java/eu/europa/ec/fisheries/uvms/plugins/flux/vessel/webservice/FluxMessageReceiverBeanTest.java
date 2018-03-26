@@ -7,7 +7,7 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.helper.Connector2BridgeRequestHelper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.AssetMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.FLUXReportVesselInformationMapper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.UpsertAssetListRequestMapper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.MapperHelper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.ExchangeService;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class FluxMessageReceiverBeanTest {
     private AssetMapper assetMapper;
 
     @Mock
-    private UpsertAssetListRequestMapper upsertAssetListRequestMapper;
+    private MapperHelper mapperHelper;
 
 
     @Test
@@ -62,7 +62,7 @@ public class FluxMessageReceiverBeanTest {
         doReturn(FLUX_REPORT_VESSEL_INFORMATION).when(requestHelper).determineMessageType(request);
         doReturn(vesselInformation).when(fluxReportVesselInformationMapper).fromConnector2BridgeRequest(request);
         doReturn(assets).when(assetMapper).fromFLUXReportVesselInformation(vesselInformation);
-        doReturn(upsertAssetListRequest).when(upsertAssetListRequestMapper).mapUpsertAssetList(assets, "FLUX");
+        doReturn(upsertAssetListRequest).when(mapperHelper).mapUpsertAssetList(assets, "FLUX");
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -72,9 +72,9 @@ public class FluxMessageReceiverBeanTest {
         verify(requestHelper).determineMessageType(request);
         verify(fluxReportVesselInformationMapper).fromConnector2BridgeRequest(request);
         verify(assetMapper).fromFLUXReportVesselInformation(vesselInformation);
-        verify(upsertAssetListRequestMapper).mapUpsertAssetList(assets, "FLUX");
+        verify(mapperHelper).mapUpsertAssetList(assets, "FLUX");
         verify(exchange).sendVesselInformation(upsertAssetListRequest);
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, mapperHelper);
 
         assertNotNull(response);
         assertEquals("OK", response.getStatus());
@@ -95,7 +95,7 @@ public class FluxMessageReceiverBeanTest {
         //verify and assert
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, mapperHelper);
 
         assertNotNull(response);
         assertEquals("OK", response.getStatus());
@@ -116,7 +116,7 @@ public class FluxMessageReceiverBeanTest {
         //verify and assert
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, mapperHelper);
 
         assertNotNull(response);
         assertEquals("OK", response.getStatus());
@@ -135,7 +135,7 @@ public class FluxMessageReceiverBeanTest {
 
         //verify
         verify(startupBean).isEnabled();
-        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, upsertAssetListRequestMapper);
+        verifyNoMoreInteractions(startupBean, exchange, requestHelper, fluxReportVesselInformationMapper, assetMapper, mapperHelper);
 
         assertNotNull(response);
         assertEquals("NOK", response.getStatus());
