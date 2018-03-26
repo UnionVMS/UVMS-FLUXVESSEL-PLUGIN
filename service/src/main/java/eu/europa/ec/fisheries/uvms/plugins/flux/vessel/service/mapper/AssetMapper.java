@@ -228,7 +228,7 @@ public class AssetMapper {
                     .getRelatedRegistrationLocation()
                     .getIDS().get(0).getValue();
         } catch (RuntimeException ex) {
-            log.info("Vessel has no name", ex);
+            log.info("Vessel has no registration location", ex);
             return null;
         }
     }
