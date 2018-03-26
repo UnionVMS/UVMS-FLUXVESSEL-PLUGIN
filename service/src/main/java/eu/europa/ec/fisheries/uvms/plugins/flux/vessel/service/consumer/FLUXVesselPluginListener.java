@@ -14,6 +14,8 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.consumer;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.PluginBaseRequest;
+import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendAssetInformationRequest;
+import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendQueryAssetInformationRequest;
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SetConfigRequest;
 import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
@@ -107,12 +109,14 @@ public class FLUXVesselPluginListener implements MessageListener {
         }
     }
 
-    private void sendInformation(TextMessage textMessage) {
+    private void sendInformation(TextMessage textMessage) throws ExchangeModelMarshallException {
+        SendAssetInformationRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, SendAssetInformationRequest.class);
         //TODO: map
         //TODO: send
     }
 
-    private void sendQuery(TextMessage textMessage) {
+    private void sendQuery(TextMessage textMessage) throws ExchangeModelMarshallException {
+        SendQueryAssetInformationRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, SendQueryAssetInformationRequest.class);
         //TODO: map
         //TODO: send
     }
