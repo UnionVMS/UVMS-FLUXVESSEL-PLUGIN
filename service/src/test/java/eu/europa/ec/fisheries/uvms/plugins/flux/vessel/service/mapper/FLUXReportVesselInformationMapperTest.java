@@ -3,9 +3,9 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper;
 import eu.europa.ec.fisheries.schema.vessel.*;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.constants.Settings;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.enums.HullMaterial;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import eu.europa.ec.fisheries.wsdl.asset.types.AssetContact;
-import eu.europa.ec.fisheries.wsdl.asset.types.HullMaterial;
 import eu.europa.ec.fisheries.wsdl.asset.types.VesselEventType_0020;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -65,7 +65,7 @@ public class FLUXReportVesselInformationMapperTest {
         BigDecimal safetyGrossTonnage = BigDecimal.valueOf(8.32);
         BigDecimal powerMain = BigDecimal.valueOf(373.2);
         BigDecimal powerAux = BigDecimal.valueOf(291.23);
-        HullMaterial hullMaterial = HullMaterial.GLAS_PLASTIC_FIBER;
+        HullMaterial hullMaterial = HullMaterial.FIBER_OR_PLASTIC;
         Date entryIntoService = new DateTime(2012, 12, 12, 12, 12, 12, 0, DateTimeZone.UTC).toDate();
         String segment = "seg";
         String countryOfImportOrExport = "BEL";
@@ -106,7 +106,7 @@ public class FLUXReportVesselInformationMapperTest {
         asset.setSafetyGrossTonnage(safetyGrossTonnage);
         asset.setPowerMain(powerMain);
         asset.setPowerAux(powerAux);
-        asset.setHullMaterial(hullMaterial);
+        asset.setHullMaterial(hullMaterial.toString());
         asset.setVesselDateOfEntry(entryIntoService);
         asset.setSegment(segment);
         asset.setCountryOfImportOrExport(countryOfImportOrExport);
@@ -256,7 +256,7 @@ public class FLUXReportVesselInformationMapperTest {
         assertEquals("FLUX_VESSEL_TECH_TYPE", vesselTransportMeansResult.getApplicableVesselTechnicalCharacteristics().get(0).getTypeCode().getListID());
         assertEquals("HULL", vesselTransportMeansResult.getApplicableVesselTechnicalCharacteristics().get(0).getTypeCode().getValue());
         assertEquals("VESSEL_HULL_TYPE", vesselTransportMeansResult.getApplicableVesselTechnicalCharacteristics().get(0).getValueCode().getListID());
-        assertEquals(asset.getHullMaterial().value(), vesselTransportMeansResult.getApplicableVesselTechnicalCharacteristics().get(0).getValueCode().getValue());
+        assertEquals(asset.getHullMaterial(), vesselTransportMeansResult.getApplicableVesselTechnicalCharacteristics().get(0).getValueCode().getValue());
         assertEquals(contactPartyTypes, vesselTransportMeansResult.getSpecifiedContactParties());
         assertEquals(dateTimeOfConstruction, vesselTransportMeansResult.getSpecifiedConstructionEvent().getOccurrenceDateTime().getDateTime());
     }

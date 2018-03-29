@@ -208,7 +208,7 @@ public class FLUXReportVesselInformationMapper {
                 .withValue("HULL"));
         hullMaterialType.setValueCode(new CodeType()
                 .withListID("VESSEL_HULL_TYPE")
-                .withValue(asset.getHullMaterial().value()));
+                .withValue(asset.getHullMaterial()));
 
         int yearOfConstruction = Integer.parseInt(asset.getYearOfConstruction());
         ConstructionEventType constructionEvent = new ConstructionEventType()
