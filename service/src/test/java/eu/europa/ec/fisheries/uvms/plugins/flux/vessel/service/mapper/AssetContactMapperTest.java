@@ -38,7 +38,9 @@ public class AssetContactMapperTest {
                 .withCountryID(new IDType().withValue(countryCode))
                 .withPostalArea(new TextType().withValue(postalCode))
                 .withPostOfficeBox(new TextType().withValue(postOfficeBox));
-        UniversalCommunicationType telephoneType = new UniversalCommunicationType().withUseCode(new CodeType().withValue("TE")).withCompleteNumber(new TextType().withValue(tel));
+        UniversalCommunicationType telephoneType = new UniversalCommunicationType()
+                .withChannelCode(new CommunicationChannelCodeType().withValue(CommunicationMeansTypeCodeContentType.TE))
+                .withCompleteNumber(new TextType().withValue(tel));
 
         ContactPartyType contactPartyType = new ContactPartyType();
         contactPartyType.setName(new TextType().withValue(name));

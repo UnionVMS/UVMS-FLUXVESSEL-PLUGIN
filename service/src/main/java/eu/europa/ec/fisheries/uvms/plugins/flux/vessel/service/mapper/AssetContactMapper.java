@@ -1,5 +1,6 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper;
 
+import eu.europa.ec.fisheries.schema.vessel.CommunicationMeansTypeCodeContentType;
 import eu.europa.ec.fisheries.schema.vessel.ContactPartyType;
 import eu.europa.ec.fisheries.wsdl.asset.types.AssetContact;
 import eu.europa.ec.fisheries.wsdl.asset.types.ContactType;
@@ -37,7 +38,7 @@ public class AssetContactMapper {
     private String getPhone(ContactPartyType contactPartyType) {
         try {
             return contactPartyType.getSpecifiedUniversalCommunications().stream()
-                    .filter(communication -> communication.getUseCode().getValue().equals("TE"))
+                    .filter(communication -> communication.getChannelCode().getValue().equals(CommunicationMeansTypeCodeContentType.TE))
                     .map(communication -> communication.getCompleteNumber().getValue())
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {

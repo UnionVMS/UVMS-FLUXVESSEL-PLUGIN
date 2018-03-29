@@ -1,9 +1,11 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper;
 
+import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendAssetInformationRequest;
 import eu.europa.ec.fisheries.schema.vessel.FLUXReportVesselInformation;
 import eu.europa.ec.fisheries.schema.vessel.IDType;
 import eu.europa.ec.fisheries.schema.vessel.VesselEventType;
 import eu.europa.ec.fisheries.schema.vessel.VesselTransportMeansType;
+import eu.europa.ec.fisheries.uvms.commons.message.impl.JAXBUtils;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.enums.HullMaterial;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import eu.europa.ec.fisheries.wsdl.asset.types.AssetContact;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.xml.bind.JAXBException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -21,6 +24,10 @@ public class AssetMapper {
 
     @EJB
     private AssetContactMapper assetContactMapper;
+
+    public Asset fromSendAssetInformationRequest(SendAssetInformationRequest request) throws JAXBException {
+        return JAXBUtils.unMarshallMessage(request.getRequest(), Asset.class);
+    }
 
     public List<Asset> fromFLUXReportVesselInformation(FLUXReportVesselInformation vesselInformation) {
         List<Asset> assets = new ArrayList<>();
@@ -229,7 +236,7 @@ public class AssetMapper {
                     .getRelatedRegistrationLocation()
                     .getIDS().get(0).getValue();
         } catch (RuntimeException ex) {
-            log.info("Vessel has no name", ex);
+            log.info("Vessel has no registration location", ex);
             return null;
         }
     }
