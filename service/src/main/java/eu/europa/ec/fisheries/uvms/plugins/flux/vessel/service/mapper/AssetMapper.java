@@ -4,9 +4,9 @@ import eu.europa.ec.fisheries.schema.vessel.FLUXReportVesselInformation;
 import eu.europa.ec.fisheries.schema.vessel.IDType;
 import eu.europa.ec.fisheries.schema.vessel.VesselEventType;
 import eu.europa.ec.fisheries.schema.vessel.VesselTransportMeansType;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.enums.HullMaterial;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import eu.europa.ec.fisheries.wsdl.asset.types.AssetContact;
-import eu.europa.ec.fisheries.wsdl.asset.types.HullMaterial;
 import eu.europa.ec.fisheries.wsdl.asset.types.VesselEventType_0020;
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,12 +99,13 @@ public class AssetMapper {
         }
     }
 
-    private HullMaterial getHullMaterial(VesselTransportMeansType vesselTransportMeans) {
+    private String getHullMaterial(VesselTransportMeansType vesselTransportMeans) {
         try {
             return vesselTransportMeans.getApplicableVesselTechnicalCharacteristics().stream()
                     .filter(characteristic -> characteristic.getTypeCode().getValue().equals("HULL"))
                     .map(characteristic -> characteristic.getValueCode().getValue())
-                    .map(HullMaterial::fromValue)
+                    .map(value -> HullMaterial.fromCode(Integer.valueOf(value)))
+                    .map(HullMaterial::toString)
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {
             log.info("Vessel contains no hull material", ex);
