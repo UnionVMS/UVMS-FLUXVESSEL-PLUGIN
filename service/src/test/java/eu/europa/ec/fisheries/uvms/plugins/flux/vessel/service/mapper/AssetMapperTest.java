@@ -3,7 +3,6 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper;
 import eu.europa.ec.fisheries.schema.vessel.*;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import eu.europa.ec.fisheries.wsdl.asset.types.AssetContact;
-import eu.europa.ec.fisheries.wsdl.asset.types.HullMaterial;
 import eu.europa.ec.fisheries.wsdl.asset.types.VesselEventType_0020;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -58,7 +57,7 @@ public class AssetMapperTest {
         BigDecimal gts = BigDecimal.valueOf(926.8);
         BigDecimal powerMain = BigDecimal.valueOf(123);
         BigDecimal powerAux = BigDecimal.valueOf(124);
-        String hullMaterial = "METAL";
+        String hullMaterial = "2";
         Date entryIntoService = new Date();
         String segment = "MFL";
         String countryOfImportOrExport = "BEL";
@@ -242,7 +241,7 @@ public class AssetMapperTest {
         assertEquals(gts, asset.getSafetyGrossTonnage());
         assertEquals(powerMain, asset.getPowerMain());
         assertEquals(powerAux, asset.getPowerAux());
-        assertEquals(HullMaterial.METAL, asset.getHullMaterial());
+        assertEquals("METAL", asset.getHullMaterial());
         assertEquals(entryIntoService, asset.getVesselDateOfEntry());
         assertEquals(segment, asset.getSegment());
         assertEquals(countryOfImportOrExport, asset.getCountryOfImportOrExport());
