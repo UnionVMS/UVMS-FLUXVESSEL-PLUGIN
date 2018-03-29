@@ -11,9 +11,7 @@
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper;
 
-import eu.europa.ec.fisheries.schema.vessel.FLUXReportVesselInformation;
 import eu.europa.ec.fisheries.schema.vessel.POSTMSG;
-import eu.europa.ec.fisheries.uvms.commons.message.impl.JAXBUtils;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.exception.PluginException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +22,6 @@ import org.xml.sax.SAXException;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
@@ -40,22 +37,20 @@ import java.util.Map.Entry;
 @Slf4j
 public class PostMsgTypeMapper {
 
-    public POSTMSG wrapInPostMsgType(@NonNull FLUXReportVesselInformation vesselInformation, @NonNull String df, @NonNull String ad) {
+    public POSTMSG wrapInPostMsgType(@NonNull String message, @NonNull String df, @NonNull String ad) {
         POSTMSG postmsg = new POSTMSG();
         postmsg.setBUSINESSUUID(UUID.randomUUID().toString());
         postmsg.setAD(ad);
         postmsg.setDF(df);
         postmsg.setDT(DateTime.now());
-        postmsg.setAny(marshalToDOM(vesselInformation));
+        postmsg.setAny(marshalToDOM(message));
 
         return postmsg;
     }
 
-    private Element marshalToDOM(FLUXReportVesselInformation vesselInformation) {
+    private Element marshalToDOM(String message) {
         try {
-            String any = JAXBUtils.marshallJaxBObjectToString(vesselInformation);
-
-            InputStream xmlAsInputStream = new ByteArrayInputStream(any.getBytes("UTF-8"));
+            InputStream xmlAsInputStream = new ByteArrayInputStream(message.getBytes("UTF-8"));
             javax.xml.parsers.DocumentBuilderFactory b = javax.xml.parsers.DocumentBuilderFactory.newInstance();
             b.setNamespaceAware(false);
             DocumentBuilder db = b.newDocumentBuilder();
@@ -63,9 +58,7 @@ public class PostMsgTypeMapper {
             return document.getDocumentElement();
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new PluginException("Could not wrap object " + vesselInformation + " in post msg", e);
-        } catch (JAXBException e) {
-            throw new PluginException("Could not convert vessel information to a string", e);
+            throw new PluginException("Could not wrap object " + message + " in post msg", e);
         }
     }
 

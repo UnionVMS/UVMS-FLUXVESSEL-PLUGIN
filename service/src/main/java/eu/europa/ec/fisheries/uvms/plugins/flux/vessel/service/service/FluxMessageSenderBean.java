@@ -1,7 +1,9 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service;
 
 import eu.europa.ec.fisheries.schema.vessel.FLUXReportVesselInformation;
+import eu.europa.ec.fisheries.schema.vessel.FLUXVesselQueryMessage;
 import eu.europa.ec.fisheries.schema.vessel.POSTMSG;
+import eu.europa.ec.fisheries.uvms.commons.message.impl.JAXBUtils;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.PortInitiator;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.exception.PluginException;
@@ -11,6 +13,7 @@ import xeu.connector_bridge.wsdl.v1.BridgeConnectorPortType;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.xml.bind.JAXBException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,10 +30,24 @@ public class FluxMessageSenderBean {
     @EJB
     private PostMsgTypeMapper postMsgTypeMapper;
 
-
     public void sendVesselInformationToFlux(FLUXReportVesselInformation vesselInformation) {
-        POSTMSG request = postMsgTypeMapper.wrapInPostMsgType(vesselInformation, startupBean.getSetting("DF"), "XEU");
-        sendPostMsgType(request);
+        try {
+            String message = JAXBUtils.marshallJaxBObjectToString(vesselInformation);
+            POSTMSG request = postMsgTypeMapper.wrapInPostMsgType(message, startupBean.getSetting("DF"), "XEU");
+            sendPostMsgType(request);
+        } catch (JAXBException e) {
+            throw new PluginException("Could not convert vessel information to a string", e);
+        }
+    }
+
+    public void sendQueryToFlux(FLUXVesselQueryMessage fluxVesselQueryMessage) {
+        try {
+            String message = JAXBUtils.marshallJaxBObjectToString(fluxVesselQueryMessage);
+            POSTMSG request = postMsgTypeMapper.wrapInPostMsgType(message, startupBean.getSetting("DF"), "XEU");
+            sendPostMsgType(request);
+        } catch (JAXBException e) {
+            throw new PluginException("Could not convert vessel query to a string", e);
+        }
     }
 
     public void sendPostMsgType(POSTMSG request) {

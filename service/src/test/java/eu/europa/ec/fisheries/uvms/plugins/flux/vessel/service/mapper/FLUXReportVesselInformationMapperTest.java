@@ -2,6 +2,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper;
 
 import eu.europa.ec.fisheries.schema.vessel.*;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.constants.Settings;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import eu.europa.ec.fisheries.wsdl.asset.types.AssetContact;
 import eu.europa.ec.fisheries.wsdl.asset.types.HullMaterial;
@@ -116,7 +117,7 @@ public class FLUXReportVesselInformationMapperTest {
 
 
         //mock
-        doReturn("BEL").when(startupBean).getSetting("flux_local_nation_code");
+        doReturn("BEL").when(startupBean).getSetting(Settings.FLUX_LOCAL_NATION_CODE);
         doReturn(contactPartyTypes).when(contactPartyTypeMapper).fromAssetContact(assetContacts);
 
         //execute

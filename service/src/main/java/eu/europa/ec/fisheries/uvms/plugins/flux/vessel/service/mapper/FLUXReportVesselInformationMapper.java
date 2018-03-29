@@ -2,6 +2,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper;
 
 import eu.europa.ec.fisheries.schema.vessel.*;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.constants.Settings;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -277,7 +278,7 @@ public class FLUXReportVesselInformationMapper {
     }
 
     private FLUXReportDocumentType createNewFLUXReportDocumentType() {
-        String countryOfHost = startupBean.getSetting("flux_local_nation_code");
+        String countryOfHost = startupBean.getSetting(Settings.FLUX_LOCAL_NATION_CODE);
 
         FLUXReportDocumentType fluxReportDocument = new FLUXReportDocumentType();
 

@@ -18,20 +18,23 @@ import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendAssetInformationRequ
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendQueryAssetInformationRequest;
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SetConfigRequest;
 import eu.europa.ec.fisheries.schema.vessel.FLUXReportVesselInformation;
+import eu.europa.ec.fisheries.schema.vessel.FLUXVesselQueryMessage;
 import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangePluginResponseMapper;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.AssetListQueryUpdatesOverFLUXMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.AssetMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.FLUXReportVesselInformationMapper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.FLUXVesselQueryMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.producer.ExchangeEventMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.FluxMessageSenderBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.PluginService;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import eu.europa.ec.fisheries.wsdl.asset.types.AssetListQueryUpdatesOverFLUX;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.ejb.*;
 import javax.jms.JMSException;
@@ -49,9 +52,8 @@ import javax.xml.bind.JAXBException;
         @ActivationConfigProperty(propertyName = "clientId", propertyValue = "eu.europa.ec.fisheries.uvms.plugins.flux.vessel"),
         @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.flux.vessel'")
 })
+@Slf4j
 public class FLUXVesselPluginListener implements MessageListener {
-
-    static final Logger LOG = LoggerFactory.getLogger(FLUXVesselPluginListener.class);
 
     @EJB
     private PluginService service;
@@ -71,10 +73,16 @@ public class FLUXVesselPluginListener implements MessageListener {
     @EJB
     private FluxMessageSenderBean fluxMessageSenderBean;
 
+    @EJB
+    private AssetListQueryUpdatesOverFLUXMapper assetListQueryUpdatesOverFLUXMapper;
+
+    @EJB
+    private FLUXVesselQueryMessageMapper fluxVesselQueryMessageMapper;
+
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void onMessage(Message inMessage) {
-        LOG.info("FLUXVesselPluginListener (MessageConstants.PLUGIN_SERVICE_CLASS_NAME): {}", startup.getRegisterClassName());
+        log.info("FLUXVesselPluginListener (MessageConstants.PLUGIN_SERVICE_CLASS_NAME): {}", startup.getRegisterClassName());
 
         TextMessage textMessage = (TextMessage) inMessage;
 
@@ -118,9 +126,9 @@ public class FLUXVesselPluginListener implements MessageListener {
             }
 
         } catch (ExchangeModelMarshallException | NullPointerException e) {
-            LOG.error("[ Error when receiving message in Belgian activity " + startup.getRegisterClassName() + " ]", e);
+            log.error("[ Error when receiving message in Belgian activity " + startup.getRegisterClassName() + " ]", e);
         } catch (JMSException | MessageException | JAXBException ex) {
-            LOG.error("[ Error when handling JMS message in Belgian activity " + startup.getRegisterClassName() + " ]", ex);
+            log.error("[ Error when handling JMS message in Belgian activity " + startup.getRegisterClassName() + " ]", ex);
         }
     }
 
@@ -133,8 +141,9 @@ public class FLUXVesselPluginListener implements MessageListener {
 
     private void sendQuery(TextMessage textMessage) throws ExchangeModelMarshallException {
         SendQueryAssetInformationRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, SendQueryAssetInformationRequest.class);
-        //TODO: map
-        //TODO: send
+        AssetListQueryUpdatesOverFLUX query = assetListQueryUpdatesOverFLUXMapper.fromSendQueryAssetInformationRequest(request);
+        FLUXVesselQueryMessage vesselQueryMessage = fluxVesselQueryMessageMapper.fromAssetListQueryUpdatesOverFLUX(query);
+        fluxMessageSenderBean.sendQueryToFlux(vesselQueryMessage);
     }
 
 }
