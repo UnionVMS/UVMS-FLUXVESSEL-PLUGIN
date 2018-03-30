@@ -178,6 +178,6 @@
         <module>service</module>
         <module>webservice</module>
         <module>module</module>
-		<!--<module>integration-tests</module>-->
+		<module>integration-tests</module>
     </modules>
 </project>

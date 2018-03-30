@@ -19,11 +19,8 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.constants.MessageType;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.exception.PluginException;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.helper.Connector2BridgeRequestHelper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.AssetMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.FLUXReportVesselInformationMapper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.MapperHelper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.ExchangeService;
-import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
+import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.FLUXReportVesselInformationService;
 import lombok.extern.slf4j.Slf4j;
 import xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType;
 
@@ -31,7 +28,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBException;
-import java.util.List;
 
 /**
  * This is the entry point for incoming FLUX messages.
@@ -40,9 +36,6 @@ import java.util.List;
 @Slf4j
 @WebService(serviceName = "VesselService", targetNamespace = "urn:xeu:bridge-connector:wsdl:v1", portName = "BridgeConnectorPortType", endpointInterface = "xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType")
 public class FluxMessageReceiverBean implements BridgeConnectorPortType {
-    
-    @EJB
-    private ExchangeService exchange;
 
     @EJB
     private StartupBean startupBean;
@@ -51,13 +44,10 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     private Connector2BridgeRequestHelper requestHelper;
 
     @EJB
+    private FLUXReportVesselInformationService fluxReportVesselInformationService;
+
+    @EJB
     private FLUXReportVesselInformationMapper fluxReportVesselInformationMapper;
-
-    @EJB
-    private AssetMapper assetMapper;
-
-    @EJB
-    private MapperHelper mapperHelper;
 
     @Override
     public Connector2BridgeResponse post(Connector2BridgeRequest request) {
@@ -95,9 +85,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     private void receiveFLUXReportVesselInformation(Connector2BridgeRequest request) throws JAXBException, AssetModelMapperException {
         log.debug("Got FLUXReportVesselInformation from FLUX in Vessel FLUX plugin");
         FLUXReportVesselInformation vesselInformation = fluxReportVesselInformationMapper.fromConnector2BridgeRequest(request);
-        List<Asset> assets = assetMapper.fromFLUXReportVesselInformation(vesselInformation);
-        String upsertAssetListRequest = mapperHelper.mapUpsertAssetList(assets, "FLUX");
-        exchange.sendVesselInformation(upsertAssetListRequest);
+        fluxReportVesselInformationService.receiveVesselInformation(vesselInformation);
     }
 
     private void receiveFLUXVesselQueryMessage(Connector2BridgeRequest request) {
