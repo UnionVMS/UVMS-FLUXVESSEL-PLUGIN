@@ -7,6 +7,7 @@ import eu.europa.ec.fisheries.schema.vessel.VesselEventType;
 import eu.europa.ec.fisheries.schema.vessel.VesselTransportMeansType;
 import eu.europa.ec.fisheries.uvms.commons.message.impl.JAXBUtils;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.enums.HullMaterial;
+import eu.europa.ec.fisheries.wsdl.asset.module.FLUXVesselSendInformation;
 import eu.europa.ec.fisheries.wsdl.asset.types.Asset;
 import eu.europa.ec.fisheries.wsdl.asset.types.AssetContact;
 import eu.europa.ec.fisheries.wsdl.asset.types.VesselEventType_0020;
@@ -26,7 +27,7 @@ public class AssetMapper {
     private AssetContactMapper assetContactMapper;
 
     public Asset fromSendAssetInformationRequest(SendAssetInformationRequest request) throws JAXBException {
-        return JAXBUtils.unMarshallMessage(request.getRequest(), Asset.class);
+        return ((FLUXVesselSendInformation) JAXBUtils.unMarshallMessage(request.getRequest(), FLUXVesselSendInformation.class)).getAsset();
     }
 
     public List<Asset> fromFLUXReportVesselInformation(FLUXReportVesselInformation vesselInformation) {
