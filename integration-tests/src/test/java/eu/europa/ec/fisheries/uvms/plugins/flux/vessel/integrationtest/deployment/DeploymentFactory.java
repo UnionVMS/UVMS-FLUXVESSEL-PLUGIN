@@ -40,6 +40,7 @@ public class DeploymentFactory {
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, name + ".war");
 
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        testWar.addAsWebInfResource("ejb-jar-test.xml", "ejb-jar.xml");
         testWar.addAsResource("logback-test.xml", "logback.xml");
         testWar.addAsManifestResource("jboss-deployment-structure.xml","jboss-deployment-structure.xml");
 
@@ -49,8 +50,8 @@ public class DeploymentFactory {
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.plugins.flux.vessel.integrationtest.deployment");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.plugins.flux.vessel.integrationtest.mother");
         testWar.addPackages(true, "org.awaitility");
-        //testWar.addClass("eu.europa.ec.fisheries.uvms.plugins.flux.vessel.integrationtest.mock.PortInitiatorMock");
-        //testWar.addClass("eu.europa.ec.fisheries.uvms.plugins.flux.vessel.integrationtest.mock.PortMock");
+        testWar.addClass("eu.europa.ec.fisheries.uvms.plugins.flux.vessel.integrationtest.mock.PortInitiatorMock");
+        testWar.addClass("eu.europa.ec.fisheries.uvms.plugins.flux.vessel.integrationtest.mock.PortMock");
 
         return testWar;
     }

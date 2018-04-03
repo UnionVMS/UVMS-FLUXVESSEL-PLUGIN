@@ -1,0 +1,15 @@
+<ejb-jar xmlns = "http://java.sun.com/xml/ns/javaee"
+         version = "3.0"
+         xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation = "http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd">
+    <enterprise-beans>
+        <session>
+            <ejb-name>FluxMessageSenderBean</ejb-name>
+            <ejb-local-ref>
+                <ejb-ref-name>eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.FluxMessageSenderBean/port</ejb-ref-name>
+                <local>eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.PortInitiator</local>
+                <ejb-link>PortInitiatorMock</ejb-link>
+            </ejb-local-ref>
+        </session>
+  </enterprise-beans>
+</ejb-jar>
