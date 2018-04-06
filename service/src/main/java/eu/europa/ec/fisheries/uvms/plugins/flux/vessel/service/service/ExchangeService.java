@@ -11,7 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service;
 
-import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.exception.PluginException;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.MapperHelper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.producer.ExchangeEventMessageProducerBean;
@@ -34,6 +33,7 @@ public class ExchangeService {
 
     public void sendVesselInformation(String upsertAssetListRequest) {
         try {
+            log.debug("Sending vessel information to Exchange");
             String receiveAssetInformation = mapperHelper.mapReceiveAssetInformation(upsertAssetListRequest, "FLUX");
             producer.sendModuleMessage(receiveAssetInformation, null);
         } catch (Exception e) {
