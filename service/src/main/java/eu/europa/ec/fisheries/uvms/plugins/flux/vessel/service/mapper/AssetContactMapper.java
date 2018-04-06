@@ -42,7 +42,7 @@ public class AssetContactMapper {
                     .map(communication -> communication.getCompleteNumber().getValue())
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {
-            log.info("Contact has no phone", ex);
+            log.info("Contact has no phone. " + ex.getMessage());
             return null;
         }
     }
@@ -51,7 +51,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getURIEmailCommunications().get(0).getURIID().getValue();
         } catch (RuntimeException ex) {
-            log.info("Contact has no email", ex);
+            log.info("Contact has no email. " + ex.getMessage());
             return null;
         }
     }
@@ -60,7 +60,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getNationalityCountryIDs().get(0).getValue();
         }  catch (RuntimeException ex) {
-            log.info("Contact has no nationality", ex);
+            log.info("Contact has no nationality. " + ex.getMessage());
             return null;
         }
     }
@@ -69,7 +69,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getSpecifiedStructuredAddresses().get(0).getStreetName().getValue();
         }  catch (RuntimeException ex) {
-            log.info("Contact has no street name", ex);
+            log.info("Contact has no street name. " + ex.getMessage());
             return null;
         }
     }
@@ -78,7 +78,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getSpecifiedStructuredAddresses().get(0).getCityName().getValue();
         }  catch (RuntimeException ex) {
-            log.info("Contact has no city name", ex);
+            log.info("Contact has no city name. " + ex.getMessage());
             return null;
         }
     }
@@ -87,7 +87,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getSpecifiedStructuredAddresses().get(0).getCountryID().getValue();
         }  catch (RuntimeException ex) {
-            log.info("Contact has no country id", ex);
+            log.info("Contact has no country id. " + ex.getMessage());
             return null;
         }
     }
@@ -96,7 +96,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getSpecifiedStructuredAddresses().get(0).getPostalArea().getValue();
         }  catch (RuntimeException ex) {
-            log.info("Contact has no postal area", ex);
+            log.info("Contact has no postal area. " + ex.getMessage());
             return null;
         }
     }
@@ -105,7 +105,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getSpecifiedStructuredAddresses().get(0).getPostOfficeBox().getValue();
         }  catch (RuntimeException ex) {
-            log.info("Contact has no post office box", ex);
+            log.info("Contact has no post office box. " + ex.getMessage());
             return null;
         }
     }
@@ -114,7 +114,7 @@ public class AssetContactMapper {
         try {
             return contactPartyType.getName().getValue();
         }  catch (RuntimeException ex) {
-            log.info("Contact has no name", ex);
+            log.info("Contact has no name. " + ex.getMessage());
             return null;
         }
     }
@@ -123,7 +123,7 @@ public class AssetContactMapper {
         try {
             return ContactType.valueOf(contactPartyType.getRoleCodes().get(0).getValue());
         }  catch (RuntimeException ex) {
-            log.info("Contact has no name", ex);
+            log.info("Contact has no type. " + ex.getMessage());
             return null;
         }
     }

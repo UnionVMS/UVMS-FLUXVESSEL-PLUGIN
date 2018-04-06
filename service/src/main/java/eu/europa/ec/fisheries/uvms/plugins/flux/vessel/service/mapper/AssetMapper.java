@@ -80,7 +80,7 @@ public class AssetMapper {
         try {
             return assetContactMapper.fromContactPartyType(vesselTransportMeans.getSpecifiedContactParties());
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no contacts", ex);
+            log.info("Vessel contains no contacts. " + ex.getMessage());
             return new ArrayList<>();
         }
     }
@@ -92,7 +92,7 @@ public class AssetMapper {
                     .getDateTime()
                     .getYear() + "";
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no construction date", ex);
+            log.info("Vessel contains no construction date. " + ex.getMessage());
             return null;
         }
     }
@@ -102,7 +102,7 @@ public class AssetMapper {
             return vesselTransportMeans.getSpecifiedRegistrationEvents().get(0)
                     .getRelatedRegistrationLocation().getCountryID().getValue();
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no country of import or export", ex);
+            log.info("Vessel contains no country of import or export. " + ex.getMessage());
             return null;
         }
     }
@@ -116,7 +116,7 @@ public class AssetMapper {
                     .map(HullMaterial::toString)
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no hull material", ex);
+            log.info("Vessel contains no hull material. " + ex.getMessage());
             return null;
         }
     }
@@ -136,7 +136,7 @@ public class AssetMapper {
                     .map(engine -> engine.getPowerMeasures().get(0).getValue())
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no vessel engine for " + role + " power.", ex);
+            log.info("Vessel contains no vessel engine for " + role + " power.. " + ex.getMessage());
             return null;
         }
     }
@@ -168,7 +168,7 @@ public class AssetMapper {
                     .map(dimension -> dimension.getValueMeasure().getValue())
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no length over all", ex);
+            log.info("Vessel contains no length over all. " + ex.getMessage());
             return null;
         }
     }
@@ -177,7 +177,7 @@ public class AssetMapper {
         try {
             return vesselTransportMeans.getRegistrationVesselCountry().getID().getValue();
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no country of registration", ex);
+            log.info("Vessel contains no country of registration. " + ex.getMessage());
             return null;
         }
     }
@@ -194,7 +194,7 @@ public class AssetMapper {
         try {
             return VesselEventType_0020.valueOf(vesselEvent.getTypeCode().getValue());
         } catch (RuntimeException ex) {
-            log.info("Vessel has no event type", ex);
+            log.info("Vessel has no event type. " + ex.getMessage());
             return null;
         }
     }
@@ -203,7 +203,7 @@ public class AssetMapper {
         try {
             return vesselEvent.getOccurrenceDateTime().getDateTime().toDate();
         } catch (RuntimeException ex) {
-            log.info("Vessel has no occurrence date", ex);
+            log.info("Vessel has no occurrence date. " + ex.getMessage());
             return null;
         }
 
@@ -225,7 +225,7 @@ public class AssetMapper {
         try {
             return vesselTransportMeans.getNames().get(0).getValue();
         } catch (RuntimeException ex) {
-            log.info("Vessel has no name", ex);
+            log.info("Vessel has no name. " + ex.getMessage());
             return null;
         }
     }
@@ -237,7 +237,7 @@ public class AssetMapper {
                     .getRelatedRegistrationLocation()
                     .getIDS().get(0).getValue();
         } catch (RuntimeException ex) {
-            log.info("Vessel has no registration location", ex);
+            log.info("Vessel has no registration location. " + ex.getMessage());
             return null;
         }
     }
@@ -273,7 +273,7 @@ public class AssetMapper {
                     .findFirst().orElse(false);
 
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no characteristic indicator for license", ex);
+            log.info("Vessel contains no characteristic indicator for license. " + ex.getMessage());
             return false;
         }
     }
@@ -287,7 +287,7 @@ public class AssetMapper {
                     .findFirst().orElse(null);
 
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no characteristic indicator for entry into service", ex);
+            log.info("Vessel contains no characteristic indicator for entry into service. " + ex.getMessage());
             return null;
         }
     }
@@ -300,7 +300,7 @@ public class AssetMapper {
                     .findFirst().orElse(null);
 
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no characteristic indicator for segment", ex);
+            log.info("Vessel contains no characteristic indicator for segment. " + ex.getMessage());
             return null;
         }
     }
@@ -313,7 +313,7 @@ public class AssetMapper {
                     .findFirst().orElse(null);
 
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no characteristic indicator for type of export", ex);
+            log.info("Vessel contains no characteristic indicator for type of export. " + ex.getMessage());
             return null;
         }
     }
@@ -326,7 +326,7 @@ public class AssetMapper {
                     .findFirst().orElse(null);
 
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no characteristic indicator for public aid", ex);
+            log.info("Vessel contains no characteristic indicator for public aid. " + ex.getMessage());
             return null;
         }
     }
@@ -340,7 +340,7 @@ public class AssetMapper {
         try {
             return vesselTransportMeans.getTypeCodes().get(0).getValue();
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no vessel type", ex);
+            log.info("Vessel contains no vessel type. " + ex.getMessage());
             return null;
         }
     }
@@ -361,7 +361,7 @@ public class AssetMapper {
                     .map(gear -> gear.getTypeCode().getValue())
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no fishing gear of role " + role);
+            log.info("Vessel contains no fishing gear of role " + role + ". " + ex.getMessage());
             return null;
         }
 
@@ -374,7 +374,7 @@ public class AssetMapper {
                     .map(IDType::getValue)
                     .findFirst().orElse(null);
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no ids", ex);
+            log.info("Vessel contains no ids. " + ex.getMessage());
             return null;
         }
     }
@@ -392,7 +392,7 @@ public class AssetMapper {
                 return null;
             }
         } catch (RuntimeException ex) {
-            log.info("Vessel contains no characteristic indicator for " + characteristicType, ex);
+            log.info("Vessel contains no characteristic indicator for " + characteristicType + ". " + ex.getMessage());
             return null;
         }
     }
