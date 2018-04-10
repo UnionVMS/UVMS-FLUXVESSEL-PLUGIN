@@ -20,6 +20,7 @@ import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SetConfigRequest;
 import eu.europa.ec.fisheries.schema.vessel.FLUXReportVesselInformation;
 import eu.europa.ec.fisheries.schema.vessel.FLUXVesselQueryMessage;
 import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
+import eu.europa.ec.fisheries.uvms.commons.message.context.MappedDiagnosticContext;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangePluginResponseMapper;
@@ -82,9 +83,11 @@ public class FLUXVesselPluginListener implements MessageListener {
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void onMessage(Message inMessage) {
+
         log.info("FLUXVesselPluginListener (MessageConstants.PLUGIN_SERVICE_CLASS_NAME): {}", startup.getRegisterClassName());
 
         TextMessage textMessage = (TextMessage) inMessage;
+        MappedDiagnosticContext.addMessagePropertiesToThreadMappedDiagnosticContext(textMessage);
 
         try {
             PluginBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, PluginBaseRequest.class);

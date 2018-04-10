@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <uvms.commons.parent.version>3.0.9</uvms.commons.parent.version>
+        <uvms.commons.parent.version>3.0.17</uvms.commons.parent.version>
         <exchange.model.version>4.0.12-SNAPSHOT</exchange.model.version>
         <activity.model.version>1.0.0</activity.model.version>
         <sl4j.version>1.7.7</sl4j.version>

@@ -22,12 +22,14 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.helper.Connector2
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.mapper.FLUXReportVesselInformationMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.vessel.service.service.FLUXReportVesselInformationService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBException;
+import java.util.UUID;
 
 /**
  * This is the entry point for incoming FLUX messages.
@@ -51,6 +53,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
 
     @Override
     public Connector2BridgeResponse post(Connector2BridgeRequest request) {
+        MDC.put("requestId", UUID.randomUUID().toString());
 
         Connector2BridgeResponse response = new Connector2BridgeResponse();
         if (!startupBean.isEnabled()) {

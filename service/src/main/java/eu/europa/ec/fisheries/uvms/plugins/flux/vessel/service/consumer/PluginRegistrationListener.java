@@ -15,6 +15,7 @@ import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginFault;
 import eu.europa.ec.fisheries.schema.exchange.registry.v1.ExchangeRegistryBaseRequest;
 import eu.europa.ec.fisheries.schema.exchange.registry.v1.RegisterServiceResponse;
 import eu.europa.ec.fisheries.schema.exchange.registry.v1.UnregisterServiceResponse;
+import eu.europa.ec.fisheries.uvms.commons.message.context.MappedDiagnosticContext;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.JAXBMarshaller;
@@ -53,7 +54,10 @@ public class PluginRegistrationListener implements MessageListener {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void onMessage(Message inMessage) {
         LOG.info("FLUX Vessel Plugin PluginRegistrationListener got a message at selector: {}", startupService.getPluginResponseSubscriptionName());
+
         TextMessage textMessage = (TextMessage) inMessage;
+        MappedDiagnosticContext.addMessagePropertiesToThreadMappedDiagnosticContext(textMessage);
+
         try {
             ExchangeRegistryBaseRequest request = tryConsumeRegistryBaseRequest(textMessage);
 
