@@ -1,4 +1,4 @@
-# UVMS-FLUXVESSEL-plugin
+# UVMS-FLUXVESSEL-PLUGIN
 
 #### Module description/purpose
 This is a plugin for the Exchange module.
