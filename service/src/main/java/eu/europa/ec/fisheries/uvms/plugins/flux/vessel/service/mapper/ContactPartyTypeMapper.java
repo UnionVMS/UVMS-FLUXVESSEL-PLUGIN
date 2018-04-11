@@ -49,6 +49,11 @@ public class ContactPartyTypeMapper {
                             .withValue(CommunicationMeansTypeCodeContentType.TE))
                     .withCompleteNumber(new TextType()
                             .withValue(assetContact.getNumber())));
+        contactPartyType.getSpecifiedUniversalCommunications().add(new UniversalCommunicationType()
+                .withChannelCode(new CommunicationChannelCodeType()
+                        .withValue(CommunicationMeansTypeCodeContentType.FX))
+                .withCompleteNumber(new TextType()
+                        .withValue(assetContact.getFaxNumber())));
         return contactPartyType;
     }
 

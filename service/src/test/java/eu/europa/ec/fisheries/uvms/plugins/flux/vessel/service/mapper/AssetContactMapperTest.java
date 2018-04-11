@@ -31,6 +31,7 @@ public class AssetContactMapperTest {
         String nationality = "BEL";
         String email = "lv@vlaanderen.be";
         String tel = "0478/4364654";
+        String fax = "0478/4364655";
 
         StructuredAddressType address = new StructuredAddressType()
                 .withStreetName(new TextType().withValue(streetName))
@@ -41,6 +42,9 @@ public class AssetContactMapperTest {
         UniversalCommunicationType telephoneType = new UniversalCommunicationType()
                 .withChannelCode(new CommunicationChannelCodeType().withValue(CommunicationMeansTypeCodeContentType.TE))
                 .withCompleteNumber(new TextType().withValue(tel));
+        UniversalCommunicationType faxType = new UniversalCommunicationType()
+                .withChannelCode(new CommunicationChannelCodeType().withValue(CommunicationMeansTypeCodeContentType.FX))
+                .withCompleteNumber(new TextType().withValue(fax));
 
         ContactPartyType contactPartyType = new ContactPartyType();
         contactPartyType.setName(new TextType().withValue(name));
@@ -49,6 +53,7 @@ public class AssetContactMapperTest {
         contactPartyType.getNationalityCountryIDs().add(new IDType().withValue(nationality));
         contactPartyType.getURIEmailCommunications().add(new EmailCommunicationType().withURIID(new IDType().withValue(email)));
         contactPartyType.getSpecifiedUniversalCommunications().add(telephoneType);
+        contactPartyType.getSpecifiedUniversalCommunications().add(faxType);
 
         //execute
         AssetContact result = assetContactMapper.fromContactPartyType(contactPartyType);
@@ -63,6 +68,7 @@ public class AssetContactMapperTest {
         assertEquals(nationality, result.getNationality());
         assertEquals(email, result.getEmail());
         assertEquals(tel, result.getNumber());
+        assertEquals(fax, result.getFaxNumber());
     }
 
     @Test

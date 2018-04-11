@@ -32,6 +32,7 @@ public class AssetContactMapper {
         assetContact.setNationality(getNationality(contactPartyType));
         assetContact.setEmail(getEmail(contactPartyType));
         assetContact.setNumber(getPhone(contactPartyType));
+        assetContact.setFaxNumber(getFax(contactPartyType));
         return assetContact;
     }
 
@@ -46,6 +47,19 @@ public class AssetContactMapper {
             return null;
         }
     }
+
+    private String getFax(ContactPartyType contactPartyType) {
+        try {
+            return contactPartyType.getSpecifiedUniversalCommunications().stream()
+                    .filter(communication -> communication.getChannelCode().getValue().equals(CommunicationMeansTypeCodeContentType.FX))
+                    .map(communication -> communication.getCompleteNumber().getValue())
+                    .findFirst().orElse(null);
+        } catch (RuntimeException ex) {
+            log.info("Contact has no phone. " + ex.getMessage());
+            return null;
+        }
+    }
+
 
     private String getEmail(ContactPartyType contactPartyType) {
         try {

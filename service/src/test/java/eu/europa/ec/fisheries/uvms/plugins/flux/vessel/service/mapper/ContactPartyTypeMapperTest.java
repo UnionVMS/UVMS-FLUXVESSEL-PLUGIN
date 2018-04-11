@@ -20,6 +20,7 @@ public class ContactPartyTypeMapperTest {
     @Test
     public void fromAssetContact() {
         String phone = "45621354";
+        String fax = "45646543";
         String email = "tellMeWhy@IDontLikeMondays.com";
         String nationality = "BEL";
         String postOfficeBox = "B";
@@ -32,6 +33,7 @@ public class ContactPartyTypeMapperTest {
 
         AssetContact assetContact = new AssetContact();
         assetContact.setNumber(phone);
+        assetContact.setFaxNumber(fax);
         assetContact.setEmail(email);
         assetContact.setNationality(nationality);
         assetContact.setPostOfficeBox(postOfficeBox);
@@ -61,8 +63,10 @@ public class ContactPartyTypeMapperTest {
         assertEquals(1, contactPartyType.getURIEmailCommunications().size());
         assertEquals("URI", contactPartyType.getURIEmailCommunications().get(0).getURIID().getSchemeID());
         assertEquals(email, contactPartyType.getURIEmailCommunications().get(0).getURIID().getValue());
-        assertEquals(1, contactPartyType.getSpecifiedUniversalCommunications().size());
+        assertEquals(2, contactPartyType.getSpecifiedUniversalCommunications().size());
         assertEquals(CommunicationMeansTypeCodeContentType.TE, contactPartyType.getSpecifiedUniversalCommunications().get(0).getChannelCode().getValue());
         assertEquals(phone, contactPartyType.getSpecifiedUniversalCommunications().get(0).getCompleteNumber().getValue());
+        assertEquals(CommunicationMeansTypeCodeContentType.FX, contactPartyType.getSpecifiedUniversalCommunications().get(1).getChannelCode().getValue());
+        assertEquals(fax, contactPartyType.getSpecifiedUniversalCommunications().get(1).getCompleteNumber().getValue());
     }
 }
